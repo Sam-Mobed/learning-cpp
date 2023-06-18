@@ -5,7 +5,8 @@
 using namespace std;
 
 //code starts executing from the main func
-int main(){
+//alternatuvely int main()
+int main(int argc, char *argv[]){
     //use standard character output 
     // << is the  bitwise shift left operator
     std::cout << "Welcome to C++!";
