@@ -154,6 +154,81 @@ if (c=0)//always false.
 ## constants
 
 Use keyword const to declare constant values. Must set the value when the constant is declared.
+
+## Functions 
+
+C++ functions don't need to belong to a class (aka be methods).
+
+In general, functions that only operate on their parameters should probably not be methods.
+
+Order of functions declared matters to the compiler. The purpose of the include keyword was to put the declarations inside iostream header file in our program. 
+
+Provide a brief comment that explains the purpose of the function when you declare its prototype.
+
+```cpp
+//using function prototypes at the top of the file is the preferred approach
+double computeTax(double subTotal);
+//second approach is to reorder where the functions are written, and those who don't call other funcs are written near the top of the file
+
+//similar to other languages, constants are in all caps and the words are separated by underscores
+const double SALES_TAX = 0.15;
+```
+Function parrameters are passed by value, by default. This means that the data is copied from the caller into the local parameter and any changes won't be reflected in the original. However, C++ provides an option for passing by reference.
+
+To pass by reference, use the & symbol between the type and the name of the variable: int& param.
+
+This way, you pass the reference of the variable to the function, and all changes will be directly done on the original.
+
+to avoid editing variables that shouldn't be modified:
+int myFunc(const string& inputParam)
+
+Another cool feature is that C++ allows us to specify default values for a parameter:
+double computeTax(double subTotal, double taxRate = 0.0.75);
+
+Important note, default arguments are always the last ones in the function declation (from right to left). 
+Also, only specify the default value once (usually in the prototype). You'll get an error if you put the default on the prototype and header of the full function definiton.
+
+```cpp
+void computeTax(double subTotal, double& tax, double& total, double taxRate){
+    tax = subTotal * taxRate;
+    total = subTotal + tax;
+}
+```
+
+## Arrays
+
+Array declarations in C++ are somewhat similar to java's, but the differences are important. 
+```cpp
+//here are the declarations of static arrays
+int score[10];
+double price[NUM_ITEMS];
+//the size must be specified
+//array size cannot be changed for static arrays
+```
+C++ have no bounds checking, they don't know how big they are. Buffer overflows are a threat to consider, as you can access elements that are outside your array if you don't pay attention.
+
+In C++, arrays are not initialized for us. 
+You can initial arrays like so:
+```cpp
+//initializing is the one exception to leaving [] empty
+char vowels[] = {'a','e','u','i','o'};
+int values[10] = {1,2,3,4};
+//if our initialized array is smaller than the size, then the rest of it is filled with 0's.
+
+//you can use this to initialize large arrays just by providing an initial value
+int counters[100] = {1};
+//the other 99 will all be 0.
+```
+
+arrays as parameters:
+void processArray(int numItems, int arr[]);
+Here we don't need to specify the size, as long as it contains integers. Here the numItems is essential, as we can't tell the size of the array inside the function.
+
+We can also pass multi-dimensional arrays like so:
+void process3D(int numPerRow, double[][10][10]);
+Here we need to specify the size of every dimension but the first one. 
+
+
 ## compilation and execution
 
 Similar to C, you compile your code using gcc or another compiler and run it by doing `./a.out`.
