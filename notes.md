@@ -372,7 +372,42 @@ Here we have an example of a memory leak. the value of 5 is still on the heap, b
 When memory leaks accumulate, the program gets more and more slower; I imagine that it's because it gets slowly harder to find free space each time we need to allocate memory for a new item. 
 
 Dangling Pointers: the opposite of the previous situation, having pointers pointing to memory that has already been freed.
+One common example is copying the value of a pointer like so: ptr1=ptr2, and then freeing one of them, and then trying to access the other one.
 
+Here we see an example of dynamically increasing the size of an array and assigning new items to it:
+```cpp
+//three of the arguments are passed by reference
+void addItem(int newItem, int*& scores, int& numItems, int& capacity){
+    if (numItems == capacity){
+        capacity = capacity * 2;
+        int* temp = new int[capacity];
+        for (int i=0; i< numItems; i++){
+            temp[i]=scores[i];
+        }
+        delete [] scores;
+        scores = temp;
+    }
+    scores[numItems] = newItem;
+    numItems++;
+}
+```
+
+## classes
+
+Class declarations, which typically declare all of the variables and methods for the class. However, we don't actually implement most methods inside the class declaration. Instead, we provide function prototypes and we write the actual methods outside the declaration. Those we do write inside the declaration tend to be very short. 
+
+Class declaration typically goes inside a .h file, while method implementations will go inside of a .cpp file.
+
+So, classes are typically written in a pair of files.
+
+important note: the class declaration must end with a semi-colon ;
+
+We need to associate method implementation with the class that they belong to, which is done by adding the class name and two colons before the method name (class::method).
+
+### the scope operator
+
+in java we have . as the scope operator (myVar.find()), in C++ the scope operator is ::, so:
+myVar::find()
 
 ## compilation and execution
 
