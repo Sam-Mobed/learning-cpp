@@ -7,8 +7,8 @@ using namespace std;
 //code starts executing from the main func
 int main(){
     //use standard character output 
-    // << is the  bitise shift left operator
-    //std::cout << "Welcome to C++!";
+    // << is the  bitwise shift left operator
+    std::cout << "Welcome to C++!";
     
     //got rid of std by using a namespace
 
@@ -34,3 +34,10 @@ int main(){
 
     return 0;
 }
+
+/*
+bitwise shift left/shift right operators (<< >>)
+
+
+
+*/
