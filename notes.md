@@ -228,6 +228,69 @@ We can also pass multi-dimensional arrays like so:
 void process3D(int numPerRow, double[][10][10]);
 Here we need to specify the size of every dimension but the first one. 
 
+## Strings
+
+Two types of strings: traditional strings from C (called C-strings), and the C++ library string class. 
+In general, it's best to avoid using C-strings whenever possible, the string class is more flexible, easier to use and not prone to buffer overflow problems.
+
+Sometimes we have to use c-strings, like the arguments passed from the command-line to the main function (argv). However, it is easy to turn a c-string into a string class object. The string class offers a method that lets us get the C-string version of any string class object.
+
+A cool C library that's available in C++ and is useful no matter the type of the string is <cctype>
+The functions in it operate on characters and can be very useful. the functions in it take in characters as argument.
+
+### C-strings
+
+Just an array of characters where the string ends with a null character \0.
+
+So if you're working with c-strings, you must have room in your array for \0.
+Except at declaration, = operator won't work to assign the value of a c-string to another variable.
+
+== doesn't work, neither does <=.>=, < or >
+
+However, you can still use C string libraries that are available in C++.
+
+## the string Class
+
+You can use the benefits of operator overloading, so operators like <,>,==,etc. can be used on string objects.
+```cpp
+//you can use these on string objects
+if (name == "Ann"){...}
+
+if (name[0] <= 'M'){...}
+
+major = preferredMajor;
+```
+
+Many operations offered by <string>:
+- += or append
+- insert, erase, replace
+- length/size
+- clear
+- empty (like isEmpty)
+- indexing with [] or at
+- iterators
+- find
+- substr
+- compare
+- c_str (turn string object into a c-string)
+
+non-member functions that work with string objects:
+- + (concatenate)
+- relational operators (<,>,<=,etc.)
+- swap
+- << and >>
+- getline (from stream into string)
+
+Reading and writing:
+you generally write into strings with <<. You can read word by word inside a string wwith >>.
+You can read line by line with getline (and you can specify another delimiter than the newline).
+
+characters:
+- get
+- put
+- peek (won't remove the character)
+- putback
+- ignore
 
 ## compilation and execution
 
@@ -235,4 +298,9 @@ Similar to C, you compile your code using gcc or another compiler and run it by 
 
 To give a custom name to the executable file, do
 `gcc -o app app.cpp`
+
+
+## Useful sites
+
+cplusplus.com
 
