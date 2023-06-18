@@ -7,11 +7,12 @@ using namespace std;
 //code starts executing from the main func
 //alternatuvely int main()
 int main(int argc, char *argv[]){
-    //use standard character output 
-    // << is the  bitwise shift left operator
-    std::cout << "Welcome to C++!";
-    
+    //use standard character output
     //got rid of std by using a namespace
+    //std::cout << "Welcome to C++!";
+    cout << "Welcome to C++!\n";
+
+    //double quotes for strings, single quotes for chars
 
     //strings can be an array of characters
     char mystr[] = "this is a string.";

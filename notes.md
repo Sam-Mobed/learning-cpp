@@ -90,3 +90,74 @@ Bitwise shift operations are useful in various scenarios, such as manipulating b
 
 Integral operands include: int, unsigned int, short, unsigned short, long, unsigned long long, etc.
 
+## Input/Output
+
+Standard input stream is **cin**
+Standard output stream is **cout**
+
+Insertion operator is **<<** to write to an output stream.
+Extraction operator **>>** which reads in data. The right-hand side is going to be the variable where we will store the data.
+
+A good way to remember which is which: the left-hand side is always cin or cout, so the arrows show which direction the data is moving from. 
+
+### '\n' vs endl 
+(endl for endline), this is an alternative to \n, and we use it in some instances. when we transfer data in and out of a program, it doesn't work character by character or word by word. The chunk of data that is transfered depends on the specifics of the computer achitecture, but usually half a kilobyte(512 bytes). 
+
+Input and output are expensive, we don't write data directly to the screen or a file, instead the data goes to an output buffer (or conversely, an input buffer). This buffer can be thought of as an array of data.
+
+When you write/read what's inside the buffer is called **flushing the buffer**.
+
+What `endl` does is that it forces the flush of the buffer, so whether you're done or out, it clears the buffer and outputs the data to the output stream. `\n` does not flush the buffer. 
+
+In many cases we don't want to flush the buffer, cause it will be less efficient. But sometimes we do.
+
+Example: if our program is crashing and we want to add print statements to help us figure out where the problem is, we need to use `endl` at the end of those print statements to make sure our debugging output actually gets to the screen or file before our program crashes, or we might think the crash happens at the wrong time. (since the print statements will go to the output buffer, and the crash might happen before the buffer gets flushed.)
+
+```cpp
+int age;
+cout << "What is your age?";
+cin >> age;
+cout << "Your age is " << age << endl;
+```
+Here, when the user enters the input, the `cin` object attempts to parse it as an integer (based on the type of the `age` variable), expecting the input to match the type. If the input cannot be parsed, there might be an error or unexpected behavior. 
+
+## basic types
+
+Mostly similar to C and Java. 
+short and long are type modifiers in C++, as opposed to separate types.
+(you can use short alone in a declaration, but technically the type is `short int`, same goes for long)
+There's quite a lot of combinations, and variations based on the architecture. So you have to take this into account when writing code.
+
+**sizeof** operator can be used to determine the size of any type including an int. 
+
+Another difference in C++ is that integers and char can be signed or unsigned. They are signed by default. To changed that: `unsigned int` or `unsigned char`. This is used in places where we know that we won't need the support of negative numbers, and we would like bigger positive numbers.
+
+for a 4-byte int:
+Signed: -2,147,483,648 to 2,147,483,647
+Unsigned: 0 to 4,294,967,295
+
+Another type is that char type is only 1 byte, so it covers ASCII only.
+However, there is wchar_t for wider character types (such as Unicode).
+In C++, similar to C, a char is treated like another kind of int.
+
+**bool** and **void** are two other types in C++, self explanatory. void is mostly used in relation to pointer variables.
+
+Boolean expressions don't need to be of type bool: 0 is false, **everything else is true**.
+
+```cpp
+if (3 < a < 8) //always true
+//it will do 3<a, and whether a is smaller or bigger than 3(0 for false, 1 for true), the result will always be smaller than 8
+if (a=9)//always true
+if (c=0)//always false.
+```
+
+## constants
+
+Use keyword const to declare constant values. Must set the value when the constant is declared.
+## compilation and execution
+
+Similar to C, you compile your code using gcc or another compiler and run it by doing `./a.out`.
+
+To give a custom name to the executable file, do
+`gcc -o app app.cpp`
+
