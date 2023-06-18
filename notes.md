@@ -292,6 +292,88 @@ characters:
 - putback
 - ignore
 
+## Pointers
+
+C++ doesn't distinguish between variable types. any kind of variable can live on the stack. Any kind of variable can have a reference, and a pointer.
+Pointers are similar to references, the value of a pointer is a memory address. Pointers are what we get in C++ when we dynamically allocate memory using new.
+
+Pointers are different from references. We can see and manipulate the memory address in a pointer, we must explicitely dereference a pointer to get what it is pointing at.
+
+```cpp
+//declaring pointers
+int *p, *q;
+char *str;
+Student *stuPtr;
+```
+Pointer values typically not initialized for you, and the size of a pointer depends on the machine architecture as it is a memory address.
+
+Dereferencing pointers:
+int myVal = *ptr;
+now myVal will hold the value that ptr was pointing to.
+Make sure that the ptr is pointing to a legitimate value(null ptr exception), and make sure it's pointing to an address that is allowed, otherwise you get a segmentation fault.
+
+nullptr for address 000000000.
+
+```cpp
+int scoreArray[10];
+int *scorePtr = scoreArray;
+*scorePtr = 10;
+//the first element of scoreArray is now 10
+scoreArray[1]=12;
+scorePtr[2]=11;
+*(scoreArray+3) = 40;
+//scoreArray: 10,12,11,40,...
+
+```
+Pointer arithmetic:
+adding 1 to a pointer changes the memoory address by the size of the target type
+for any array: arr[i] == *(arr+i)
+
+### The address operator (&)
+
+It allows us to determine the address of an item in memory.
+int v, *ptr;
+ptr = &v;
+
+## Dynamic Memory Management in C++
+
+the new operator: it allocates space for a data item in the heap. It then returns a pointer to that item. new can be used with any type.
+
+```cpp
+int *myPtr = new int;
+string *myStrPtr = new String("Sally");
+//new can also be used to create dynamic arrays
+int* scores = new int[10];
+string *nameArray = new string[24];
+//can initialize it too
+int *scores = new int[10]{4,5,10,12};
+//you can leave out the 10.
+```
+One big difference between static arrays and dynamic arrays is that dynamic arrays are initialized by default.
+
+Managing dynamic arrays: you need a pointer to the data, the capacity of the array, and the number of items.
+
+Cleaning up:
+this isn't an issue for statically allocated variables, as they're cleared from the stack. For dynamically allocated objects, we need to clean up ourselves, as C++ doesn't have a garbage collector. thus, we must free the memory using the **delete** operator.
+```cpp
+delete myPtr;
+delete [] scores;
+```
+delete doesn't change the value of the pointer or the value of the target. It only tells the system that this memory is no longer in use and may be re-allocated.
+```cpp
+int *intPtr = new int;
+*intPtr = 5;
+intPtr = new int;
+*intPtr = 10;
+/*
+Here we have an example of a memory leak. the value of 5 is still on the heap, but we can't access it anymore.
+*/
+```
+When memory leaks accumulate, the program gets more and more slower; I imagine that it's because it gets slowly harder to find free space each time we need to allocate memory for a new item. 
+
+Dangling Pointers: the opposite of the previous situation, having pointers pointing to memory that has already been freed.
+
+
 ## compilation and execution
 
 Similar to C, you compile your code using gcc or another compiler and run it by doing `./a.out`.
