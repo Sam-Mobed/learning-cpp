@@ -75,6 +75,17 @@ The behavior of the insertion operator (<<) is determined at compile time.
 
 In C++, operator overloading is a compile-time mechanism. The compiler resolves which overloaded version of the << operator to use based on the types of the operands involved. The appropriate overload is resolved during the compilation phase, and the corresponding code is generated accordingly.
 
+## Operator Overloading
+
+Similar to function overloading. The number of parameters stay the same though, same for how the parameters are passed to the operators.
+
+If we want to overload the + operator, we do: operator+
+for equals, it's: operator==
+
+When overloading operators in classes, we need to think about where our operators go. some of them must be implmented aasa member functions (methods), such as the assignment operator (=) and the index operator ([]). Otherwise, insertion and extraction operators cannot be methods, they must be implemented outside of the class, this is because the left argument for them are the stream classes, and we can't modify them. 
+
+The rest of them can be done either way.
+
 
 ## Bitwise Shift Operations
 
@@ -404,10 +415,132 @@ important note: the class declaration must end with a semi-colon ;
 
 We need to associate method implementation with the class that they belong to, which is done by adding the class name and two colons before the method name (class::method).
 
+Other terminology:
+Instance variables aand class variables are referred to as data members.
+Methods are known asa member functions.
+
+inside constructors, C++ allows aa thing called initializtion list.
+
+functions that we implement inside the class declaration are called inline functions. functions that are 1-2 lines (and don't make lots of function calls), like getters and setters should be inline. Longer functions and those who have other function calls inside of them should me implemented outside.
+
+Separate compilation:
+why we separate our code into multiple files. A design pattern. it facilitates reuse of code, instead of extracting a small piece of a file, we take an entire file. Less error-prone. Easier to debug. Keeps us from haaving multiple copies of the same code in a file. New changes become easier to implement.
+
+->
+This is the arrow operator, similar to the one in C. When you reference a part of an object that you have a pointer to, use this operator: stuPtr->getMajor();
+
+We need it becaause the . operator has a higher precedence than the dereference operator, so *stuPtr.getMajor() produces an error.
+(*stuPtr).getMajor(); this works but everyone uses arrows.
+
+Class varriables/methods:
+To declare them, use the static keyword. Class variables are declared similarly, but must be defined outside the class as well, in the .cpp file for the class.
+
+```cpp
+//header file date.h
+
+//by default, things inside this class are private.
+#include <string>
+using namespace std;
+
+class Date{
+    private:
+        int month;
+        int day;
+        int year;
+        //but we also need to give it some space and initial value
+        static int dateCounter;
+
+    public:
+        //two constructors here:
+        Date();
+        //you could also just define it here
+        //Date():month(1),day(1),year(2020) {}
+        //or use the other constructor we defined:
+        //Date(): Date(1,1,2020);
+
+        Date(int thisMonth, int thisDay, int thisYear): month(thisMonth), day(thisDay), year(thisYear) {dateCounter++;}
+
+        //the const is to show the compiler that this method won't change the item
+        int getMonth() const {return month;}
+
+        string getShortDate() const;
+
+        void setDay(int day) { this->day = day;}
+
+        static int getNumDates() {return dateCounter;}
+
+        //== takes two arguments, but since this is a method the first argument is represented as the `this` keyword.
+        bool operator==(const Date& rhs);
+
+//insertion and extraction operators return a reference to a stream
+//thats how we can chain them.
+ostream& operator<<(ostream& outStream, const Date& dateToPrint);
+};
+
+//and this is the code for date.cpp
+//small note, when we include our own .h files, we use double quotes and not <>. The "" tells the precompiler that it should look in the current directory for the file. Whereas the <> tell it to go to the C++ library.
+#include "date.h"
+
+//we only need to implement the default constructor and getShortDate()
+//Date:: tells us that this constructor/method belongs to the date class
+Date::Date(){
+    month=1;
+    day=1;
+    year=2020;
+}
+
+int Date::dateCounter = 0;
+
+//still need to add const here as well, if we don't the compiler will complain and think that this is a different function, and we don't have an implementation for the method with const yet.
+string Date::getShortDate() const {
+    return to_string(day)+"-"+to_string(month)+"-"+to_string(year);
+}
+
+bool Date::operator==(const Date& rhs){
+    return this->year == rhs.year;
+}
+
+ostream& operator<<(ostream& outStream, const Date& dateToPrint){
+    return (outStream << dateToPrint.getShortDate());
+}
+
+//and inside main.cpp
+#include "date.h"
+
+int main(){
+    Date defaultDate; //no need for () when instanciating with default constructor in C++
+
+    //the previous one lives on the stack, but you can create them dynamically as well
+    //Date* defaultDate = new Date;
+    //Date* schoolStart = new Date(8,17,2020);
+    //defaultDate->getShortDate();
+
+    Date schoolStart(8,17,2020);
+    cout << defaultDate.getShortDate() << "\n";
+
+    //after overloading the << operator
+    cout << defaultDate << "\n";
+
+    defaultDate.setDay(20);
+
+    //to use a static method/variable, we need to use the class name
+    cout << Date::getNumDates() << endl;
+    return 0;
+}
+```
 ### the scope operator
 
 in java we have . as the scope operator (myVar.find()), in C++ the scope operator is ::, so:
 myVar::find()
+
+### Friends
+
+The class says who its friends are. Friends can access what is private or protected. Controversial feature as some argue that it breaks encapsulation.
+
+## Dynamic Classes
+
+Using dynamic memory comes with memory leaks and dangling memory. With classes, we need to write three methods to make sure that the memory is cleaned up properly: the destructor, the copy constructor, the assignment operator. C++ actually offers default versions of these, but they only work well when we don't have dynamic memory to manage.
+Destructor: called when the object is destroyed. (out of scope or someone called delete on it.)
 
 ## compilation and execution
 
@@ -415,6 +548,10 @@ Similar to C, you compile your code using gcc or another compiler and run it by 
 
 To give a custom name to the executable file, do
 `gcc -o app app.cpp`
+
+If you have multiple .cpp files, then you have to compile them all. Good practice is to have a `makefile` file that will run a series of commands and compile everything for you. 
+
+You do not compile .h files.
 
 
 ## Useful sites
