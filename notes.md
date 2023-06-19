@@ -541,7 +541,42 @@ The class says who its friends are. Friends can access what is private or protec
 
 Using dynamic memory comes with memory leaks and dangling memory. With classes, we need to write three methods to make sure that the memory is cleaned up properly: the destructor, the copy constructor, the assignment operator. C++ actually offers default versions of these, but they only work well when we don't have dynamic memory to manage.
 Destructor: called when the object is destroyed. (out of scope or someone called delete on it.)
+~Classname(){
+    delete dynamicData;
+    //anythingelse that needs to be removed.
+}
 
+Copy constructor: called when we create an object based on another object. The default copy constructor creates a shallow copy, and when the object is deleted, one of the pointers is deleted with it but the other one becomes a dangling pointer.
+
+A  correct copy constructor creates a deep copy, not just a new pointer:
+ClassName::ClassName(const ClassName& orig){
+    this->staticData = orig.staticData;
+    this->allocatedData = new type;
+    *(this->allocatedData) = *(orig.allocatedData);
+}
+
+The assignment operator: For when we assign one object to another object. It needs to do three things: delete the existing memory(like destructor), allocate the right new memory and copy all the data(like copy constructor), and finally it needs to return its new value(return *this). One corner case is when an object gets assigned to itself. If this is the case, we need to avoid deleting the existing memory.
+
+**the video tutorial goes in depth on this, highly recommend going back to watch it**
+
+
+## Vectors
+
+Essentially a dynamic array, like Java's arrayList.
+Declared like so:
+//assuming you're using a namespace
+vector<int> integers;
+integers.push_back(1);
+
+//vertices.size() to get the size of the vector
+
+You can use [] to access an element inside of a vector, thanks to operator overloading. (integers[3])
+
+Sometimes you should have the pointers in the vector, other times its better to put the object itself inside of the vector. Dynamic arrays are arrays that use contiguous memory. 
+ It is technically more optimal to store objects instead of pointers, cause then your memory is going to be inline.
+But then again it depends on what you're trying to achieve with the vector. if the elements inside the vector are going to be swapped around often, then it's better to have pointers in the vector inside of entire objects.
+
+Another note, when you want to write a function that takes in a vector as an argument, make sure to make it so it's passed as a reference (&myVector), otherwise the entire vector will be copied.
 ## compilation and execution
 
 Similar to C, you compile your code using gcc or another compiler and run it by doing `./a.out`.
@@ -557,4 +592,5 @@ You do not compile .h files.
 ## Useful sites
 
 cplusplus.com
+https://www.youtube.com/watch?v=QBg6zb8f3Lc&list=PLrB7VCHji9zhoXMnbNUBqvD-NIi7XK2xD&index=9
 
